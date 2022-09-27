@@ -4,6 +4,8 @@ import os
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from scipy.stats import spearmanr
+from scipy.cluster import hierarchy
 
 
 def gradientbars(bars, data):
@@ -53,5 +55,37 @@ def plot_correlationbar(corrcoefs, feature_names, outpath, fname_out, name_metho
 	if show:
 		plt.show()
 	plt.close('all')
+
+
+def plot_feature_correlation_spearman(X, feature_names, outpath, show = False):
+	"""
+	Plot feature correlations using Spearman correlation coefficients.
+	Feature correlations are automatically clustered using hierarchical clustering.
+
+	Result figure is automatically saved in specified path.
+
+	Input:
+		X: data array
+		feature names: list of feature names
+		outpath: path to save plot
+		show: if True, interactive matplotlib plot is shown
+	"""
+	fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+	corr = spearmanr(X).correlation
+	corr_linkage = hierarchy.ward(corr)
+	dendro = hierarchy.dendrogram(corr_linkage, labels=feature_names, ax=ax1, leaf_rotation=90)
+	dendro_idx = np.arange(0, len(dendro['ivl']))
+
+	# Plot results:
+	pos = ax2.imshow(corr[dendro['leaves'], :][:, dendro['leaves']])
+	ax2.set_xticks(dendro_idx)
+	ax2.set_yticks(dendro_idx)
+	ax2.set_xticklabels(dendro['ivl'], rotation='vertical')
+	ax2.set_yticklabels(dendro['ivl'])
+	fig.colorbar(pos, ax = ax2)
+	fig.tight_layout()
+	plt.savefig(os.path.join(outpath, 'Feature_Correlations_Hierarchical_Spearman.png'), dpi = 300)
+	if show:
+		plt.show()
 
 
