@@ -20,7 +20,7 @@ __name__ = 'XICOR'
 __fullname__= 'Generalized Correlation Coefficient'
 
 
-def factor_importance(X, y, norm = False):
+def factor_importance(X, y, norm = True):
     """
     Calculation of general correlation coefficient 
 
@@ -29,7 +29,7 @@ def factor_importance(X, y, norm = False):
     Input:
         X: data feature array with shape (npoints, n_features)
         y: target variable as vector with size npoints
-        norm: normalize results to maximum feature importance is unity
+        norm: boolean, if True (default) normalize correlation coefficients to sum = 1
 
     Return:
         corr: correlation coefficients

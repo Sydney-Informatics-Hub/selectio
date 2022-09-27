@@ -15,7 +15,7 @@ __name__ = 'BLR'
 __fullname__ = 'Bayesian Log-Linear Regression'
 
 
-def factor_importance(X, y, logspace = True, signif_threshold = 2, norm = False):
+def factor_importance(X, y, logspace = True, signif_threshold = 2, norm = True):
 	"""
 	Trains Bayesian Linear/Log Regression model and returns the estimated significance of regression coefficients.
 	The significance of the linear coefficient is defined by dividing the estimated coefficient 
@@ -26,7 +26,7 @@ def factor_importance(X, y, logspace = True, signif_threshold = 2, norm = False)
 		y: target varable with shape (npoints)
 		logspace: if True (default), models regression in logspace
 		signif_threshold: threshold for coefficient significance to be considered significant (Default = 2)
-		norm: boolean, if True (default) normalize maximum correlation significance to 1
+		norm: boolean, if True (default) normalize correlation coefficients to sum = 1
 
 	Return:
 		coef_signif: Significance of coefficients (Correlation coefficient / Stddev)
@@ -60,5 +60,5 @@ def factor_importance(X, y, logspace = True, signif_threshold = 2, norm = False)
 	coef_signif[coef_signif < signif_threshold] = 0
 	# Normalize:
 	if norm:
-		coef_signif /= np.max(coef_signif)
+		coef_signif /= np.sum(coef_signif)
 	return coef_signif

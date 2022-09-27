@@ -9,7 +9,7 @@ from scipy.stats import spearmanr
 __name__ = 'RF'
 __fullname__ = 'Random Forest Permutation' 
 
-def factor_importance(X_train, y_train, correlated = False, norm = False):
+def factor_importance(X_train, y_train, correlated = False, norm = True):
 	"""
 	Factor importance using RF permutation test and optional corrections 
 	for multi-collinarity (correlated) features. 
@@ -20,7 +20,7 @@ def factor_importance(X_train, y_train, correlated = False, norm = False):
 		X: input data matrix with shape (npoints,nfeatures)
 		y: target varable with shape (npoints)
 		correlated: if True, features are assumed to be correlated
-		norm: normalize results to maximum feature importance of 1
+		norm: boolean, if True (default) normalize correlation coefficients to sum = 1
 
 	Return:
 		imp_mean_corr: feature importances
@@ -49,5 +49,5 @@ def factor_importance(X_train, y_train, correlated = False, norm = False):
 	imp_mean_corr[imp_mean_corr / imp_std_corr < 3] = 0
 	imp_mean_corr[imp_mean_corr < 0.001] = 0
 	if norm:
-		imp_mean_corr /= imp_mean_corr.max()
+		imp_mean_corr /= np.sum(imp_mean_corr)
 	return imp_mean_corr

@@ -10,14 +10,14 @@ from scipy.stats import spearmanr
 __name__ = 'Spearman'
 __fullname__ = 'Spearman Rank'
 
-def factor_importance(X_train, y_train, norm = False):
+def factor_importance(X_train, y_train, norm = True):
 	"""
 	Spearman rank analysis
 
 	Input:
 		X: input data matrix with shape (npoints,nfeatures)
 		y: target varable with shape (npoints)
-		norm: normalize results to maximum feature importance is unity
+		norm: boolean, if True (default) normalize correlation coefficients to sum = 1
 
 	Return:
 		result: feature importances
@@ -29,5 +29,5 @@ def factor_importance(X_train, y_train, norm = False):
 		if sr.pvalue < 0.01:
 			corr[i] = sr.correlation
 	if norm:
-		corr /= corr.max()
+		corr /= np.sum(corr)
 	return corr

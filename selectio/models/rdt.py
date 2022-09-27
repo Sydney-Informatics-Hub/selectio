@@ -10,7 +10,7 @@ __name__ = 'RDT'
 __fullname__ = 'Randomized Decision Trees'
 
 
-def factor_importance(X_train, y_train, norm = False):
+def factor_importance(X_train, y_train, norm = True):
     """
     Factor importance using randomized decision trees (a.k.a. extra-trees)
     on various sub-samples of the dataset
@@ -18,7 +18,7 @@ def factor_importance(X_train, y_train, norm = False):
     Input:
         X: input data matrix with shape (npoints,nfeatures)
         y: target varable with shape (npoints)
-        norm: normalize results to maximum feature importance is unity
+        norm: boolean, if True (default) normalize correlation coefficients to sum = 1
 
     Return:
         result: feature importances
@@ -28,5 +28,5 @@ def factor_importance(X_train, y_train, norm = False):
     result = model.feature_importances_
     result[result < 0.001] = 0
     if norm:
-        result /= result.max()
+        result /= np.sum(result)
     return result

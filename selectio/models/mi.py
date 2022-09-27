@@ -13,13 +13,14 @@ import numpy as np
 __name__ = 'MI'
 __fullname__ = 'Mutual Information'
 
-def factor_importance(X_train, y_train, norm = False):
+def factor_importance(X_train, y_train, norm = True):
     """
     Factor importance using mutual information.
 
     Input:
         X: input data matrix with shape (npoints,nfeatures)
         y: target varable with shape (npoints)
+        norm: boolean, if True (default) normalize correlation coefficients to sum = 1
 
     Return:
         mi: mutual information
@@ -27,5 +28,5 @@ def factor_importance(X_train, y_train, norm = False):
 
     mi = mutual_info_regression(X_train, y_train)
     if norm:
-        mi /= np.max(mi)
+        mi /= np.sum(mi)
     return mi
