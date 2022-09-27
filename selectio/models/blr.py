@@ -11,17 +11,20 @@ import numpy as np
 from sklearn.preprocessing import RobustScaler
 from sklearn.linear_model import BayesianRidge
 
+__name__ = 'BLR'
+__fullname__ = 'Bayesian Log-Linear Regression'
 
-def factor_importance(X, y, logspace = False, signif_threshold = 2, norm = True):
+
+def factor_importance(X, y, logspace = True, signif_threshold = 2, norm = False):
 	"""
-	Trains Bayesian Linear Regression model and returns the estimated significance of regression coefficients.
+	Trains Bayesian Linear/Log Regression model and returns the estimated significance of regression coefficients.
 	The significance of the linear coefficient is defined by dividing the estimated coefficient 
 	over the standard deviation of this estimate. The correlation significance is set to zero if below threshold.
 
 	Input:
 		X: input data matrix with shape (npoints,nfeatures)
 		y: target varable with shape (npoints)
-		logspace: if True, models regression in logspace
+		logspace: if True (default), models regression in logspace
 		signif_threshold: threshold for coefficient significance to be considered significant (Default = 2)
 		norm: boolean, if True (default) normalize maximum correlation significance to 1
 

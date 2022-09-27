@@ -6,6 +6,9 @@ on various sub-samples of the dataset
 import numpy as np
 from sklearn.ensemble import ExtraTreesRegressor
 
+__name__ = 'RDT'
+__fullname__ = 'Randomized Decision Trees'
+
 
 def factor_importance(X_train, y_train, norm = False):
     """

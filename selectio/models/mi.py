@@ -10,7 +10,10 @@ Ref:
 from sklearn.feature_selection import mutual_info_regression
 import numpy as np
 
-def factor_importance(X_train, y_train, norm = True):
+__name__ = 'MI'
+__fullname__ = 'Mutual Information'
+
+def factor_importance(X_train, y_train, norm = False):
     """
     Factor importance using mutual information.
 

@@ -7,8 +7,8 @@ Limitations: assumes monotonic function and cannot model interaction terms
 import numpy as np
 from scipy.stats import spearmanr
 
-__modelname__ = 'Spearman'
-__title__ = 'Spearman Rank'
+__name__ = 'Spearman'
+__fullname__ = 'Spearman Rank'
 
 def factor_importance(X_train, y_train, norm = False):
 	"""
@@ -30,4 +30,4 @@ def factor_importance(X_train, y_train, norm = False):
 			corr[i] = sr.correlation
 	if norm:
 		corr /= corr.max()
-	return corr, pvalue
+	return corr

@@ -16,29 +16,36 @@ if Y is a function X, and not just if one of the variables is a function of the 
 import numpy as np
 import scipy.stats as stats
 
-def factor_importance(X, y):
-	"""
-	Calculation of general correlation coefficient 
-	
-	This function also removes Nans and converts factor variables to integers automatically.
+__name__ = 'XICOR'
+__fullname__= 'Generalized Correlation Coefficient'
 
-	Input:
-		X: data feature array with shape (npoints, n_features)
-		y: target variable as vector with size npoints
 
-	Return:
-		corr: correlation coefficients
-	"""
-	n_features = X.shape[1] 
-	corr = np.empty(n_features)
-	pvals = np.empty(n_features)
-	for i in range(n_features):
-		xi_obj = Xicor(X[:,i], y)
-		corr[i] = xi_obj.correlation
-		pvals[i] = xi_obj.pval_asymptotic(ties=False, nperm=1000)
-	# set correlation coefficient to zero for non-significant p_values (P > 0.01)
-	corr[pvals>0.01] = 0
-	return corr
+def factor_importance(X, y, norm = False):
+    """
+    Calculation of general correlation coefficient 
+
+    This function also removes Nans and converts factor variables to integers automatically.
+
+    Input:
+        X: data feature array with shape (npoints, n_features)
+        y: target variable as vector with size npoints
+        norm: normalize results to maximum feature importance is unity
+
+    Return:
+        corr: correlation coefficients
+    """
+    n_features = X.shape[1] 
+    corr = np.empty(n_features)
+    pvals = np.empty(n_features)
+    for i in range(n_features):
+        xi_obj = Xicor(X[:,i], y)
+        corr[i] = xi_obj.correlation
+        pvals[i] = xi_obj.pval_asymptotic(ties=False, nperm=1000)
+    # set correlation coefficient to zero for non-significant p_values (P > 0.01)
+    corr[pvals>0.01] = 0
+    if norm:
+        corr /= corr.max()
+    return corr
 
 
 class Xicor:
