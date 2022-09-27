@@ -17,9 +17,8 @@ from selectio import Fsel
 fsel = selectio.Fsel(X, y)
 dfres = fsel.score_models()
 
-or integrated into the data processing and plotting via a setings yaml file:
-import selectio
-selectio.main(fname_settings)
+or integrated into the data processing and plotting via a settings yaml file:
+python selectio.py --settings fname_settings
 
 
 User settings, such as input/output paths and all other options, are set in the settings file 
@@ -93,7 +92,7 @@ class Fsel:
 		Calculate feature importance for all models and select features
 
 		Return:
-			corr_array: shape (nmodels, nfeatures)
+			dfmodels: pandas dataframe with scores for each feature
 		"""
 		# Loop over all models and calculate normalized feature scores
 		count_select = np.zeros(self.nfeatures).astype(int)
@@ -116,9 +115,15 @@ class Fsel:
 		return self.dfmodels
 
 
-	def eval_score(self, score, woe_min = 0.01):
+	def eval_score(self, score, woe_min = 0.05):
 		"""
 		Evaluate multi-model feature importance scores and select features based on majority vote
+
+		Input:
+			score: 1dim array with scores
+			woe_min: minimum fractional contribution to total score (default = 0.05)
+		Return:
+			woe: array of acceptance (1 = accepted, 0 = not)
 		""" 
 		sum_score = score.sum()
 		min_score = sum_score * woe_min
@@ -171,6 +176,8 @@ def main(fname_settings):
 	# Save results as csv
 	dfres.to_csv(os.path.join(settings.outpath, 'feature-importance_scores.csv'), index_label = 'Feature_index')
 
+	# initialise array for total score across all models
+	scores_total = np.zeros(X.shape[1])
 	# Plot scores
 	print("Generating score plots..")
 	for i in range(len(_modelnames)):
@@ -182,7 +189,14 @@ def main(fname_settings):
 			model_label = modelname
 			model_fullname = modelname
 		scores = dfres['score_' + modelname].values
+		woe = dfres['woe_' + modelname].values
 		plot_correlationbar(scores, settings.name_features, settings.outpath, f'{model_label}-feature-importance.png', name_method = model_fullname, show = False)
+
+		# Add to total scores
+		scores_total += scores * woe
+	# plot total score
+	scores_total /= np.sum(scores_total)
+	plot_correlationbar(scores_total, settings.name_features, settings.outpath, 'Combined-feature-importance.png', name_method = 'Combined Model Score', show = False)
 
 
 	

@@ -109,7 +109,8 @@ def test_select():
 
     # Generate simulated data
     print("Generate simulated data...")
-    dfsim, _, feature_names_sim = create_simulated_features(8, outpath = outpath)
+    dfsim, coefsim, feature_names_sim = create_simulated_features(8, outpath = outpath)
+    print(f'True coefficients of simulated data are: {np.round(coefsim,4)}')
 
     # Generate settings file for simulated data
     # (Note: you could also just simply set settings variables here, but this is also testing the settings file readout)
@@ -138,6 +139,7 @@ def test_select():
             model_label = modelname
             model_fullname = modelname
         assert os.path.isfile(os.path.join(outpath, f'{model_label}-feature-importance.png')), f'Plot for {model_fullname} not generated.'
+    assert os.path.isfile(os.path.join(outpath, 'Combined-feature-importance.png')), 'Plot for combined feature importance not generated.'
 
     # Remove temporary result folder
     # shutil.rmtree(outpath)
