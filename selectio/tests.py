@@ -24,75 +24,75 @@ _fname_settings = selectio._fname_settings
 ### Test Models ####
 
 def test_rf_factor_importance():
-	"""
-	Test function for feature importance using random forest 
-	"""
+    """
+    Test function for feature importance using random forest 
+    """
     from models import rf
-	dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'quadratic', noise = 0.05)
-	X = dfsim[feature_names].values
-	y = dfsim['Ytarget'].values
-	imp_mean_corr = rf.factor_importance(X, y)
-	assert np.argmax(coefsim) == np.argmax(imp_mean_corr)
+    dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'quadratic', noise = 0.05)
+    X = dfsim[feature_names].values
+    y = dfsim['Ytarget'].values
+    imp_mean_corr = rf.factor_importance(X, y)
+    assert np.argmax(coefsim) == np.argmax(imp_mean_corr)
 
 
 def test_blr_factor_importance():
-	"""
-	Test function for bayesian log-power regression model
-	"""
+    """
+    Test function for bayesian log-power regression model
+    """
     from models import blr
-	dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'linear', noise = 0.05)
-	X = dfsim[feature_names].values
-	y = dfsim['Ytarget'].values
-	coef_signif = blr.factor_importance(X, y)
-	assert np.argmax(coefsim) == np.argmax(coef_signif)
+    dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'linear', noise = 0.05)
+    X = dfsim[feature_names].values
+    y = dfsim['Ytarget'].values
+    coef_signif = blr.factor_importance(X, y)
+    assert np.argmax(coefsim) == np.argmax(coef_signif)
 
 
 def test_xicor_factor_importance():
-	"""
-	Test function for generalised model
-	"""
+    """
+    Test function for generalised model
+    """
     from models import xicor
-	dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
-	X = dfsim[feature_names].values
-	y = dfsim['Ytarget'].values
-	corr = xicor.factor_importance(X, y)
-	assert np.argmax(coefsim) == np.argmax(corr)
+    dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
+    X = dfsim[feature_names].values
+    y = dfsim['Ytarget'].values
+    corr = xicor.factor_importance(X, y)
+    assert np.argmax(coefsim) == np.argmax(corr)
 
 
 def test_rdt_factor_importance():
-	"""
-	Test function for randomized decision trees (RDT)
-	"""
+    """
+    Test function for randomized decision trees (RDT)
+    """
     from models import rdt
-	dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
-	X = dfsim[feature_names].values
-	y = dfsim['Ytarget'].values
-	corr = rdt.factor_importance(X, y)
-	assert np.argmax(coefsim) == np.argmax(corr)
+    dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
+    X = dfsim[feature_names].values
+    y = dfsim['Ytarget'].values
+    corr = rdt.factor_importance(X, y)
+    assert np.argmax(coefsim) == np.argmax(corr)
 
 
 def test_mi_factor_importance():
-	"""
-	Test function for mutual information model
-	"""
+    """
+    Test function for mutual information model
+    """
     from models import mi
-	dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
-	X = dfsim[feature_names].values
-	y = dfsim['Ytarget'].values
-	corr = mi.factor_importance(X, y)
-	assert np.argmax(coefsim) == np.argmax(corr)
+    dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
+    X = dfsim[feature_names].values
+    y = dfsim['Ytarget'].values
+    corr = mi.factor_importance(X, y)
+    assert np.argmax(coefsim) == np.argmax(corr)
 
 
 def test_spearman_factor_importance():
-	"""
-	Test function for Spearman Rank analysis
-	"""
+    """
+    Test function for Spearman Rank analysis
+    """
     from models import spearman
-	dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
-	X = dfsim[feature_names].values
-	y = dfsim['Ytarget'].values
-	corr = spearman.factor_importance(X, y)
-	assert np.argmax(coefsim) == np.argmax(corr)
+    dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
+    X = dfsim[feature_names].values
+    y = dfsim['Ytarget'].values
+    corr = spearman.factor_importance(X, y)
+    assert np.argmax(coefsim) == np.argmax(corr)
 
 
 
