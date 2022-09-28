@@ -1,45 +1,32 @@
 """
-Automatic feature importance calcuations and feature selections based on multiple methods.
+Multi-model Feature Importance Scoring and auto Feature Selection.
+------------------------------------------------------------------- 
 
-Current models for feature importance supported:
-- Spearman rank analysis ('spearman')
-- linear and log-scaled Bayesian Linear Regression ('blr')
-- Random Forest Permutation Test ('rf')
-- Random Decision Trees ('rdt')
-- Mutual Information Regression ('mi')
-- General correlation coefficients ('xicor')
+This Python package returns multiple feature importance scores, feature ranks,
+and automatically suggests a feature selection based on the majority vote of all models.
 
-Selectio return a dataframe and plots with feature importance scores for all models.
-The final feature selection is based on a majority voting of all models.
+## Models
 
-The feature selection score can be either computed directly via the class Fsel, e.g.
-from selectio import Fsel
-fsel = selectio.Fsel(X, y)
-dfres = fsel.score_models()
+Currently the following six models for feature importance scoring are included:
+- Spearman rank analysis (see 'models.spearman')
+- Correlation coefficient significance of linear/log-scaled Bayesian Linear Regression (see 'models.blr')
+- Random Forest Permutation test (see 'models.rf.py')
+- Random Decision Trees on various subsamples of data (see 'models.rdt.py')
+- Mutual Information Regression (see 'models.mi')
+- General correlation coefficients (see 'models.xicor')
 
-or integrated into the data processing and plotting via a settings yaml file:
-python selectio.py --settings fname_settings
+## Usage
 
+The feature selection score can be either computed directly using the class Fsel, or can be called directly 
+with more functionality (including preprocessing and plotting) using a settings yaml file:
+python selectio.py -s fname_settings
 
-User settings, such as input/output paths and all other options, are set in the settings file 
+User settings such as input/output paths and all other options are set in the settings file 
 (Default filename: settings_featureimportance.yaml) 
 Alternatively, the settings file can be specified as a command line argument with: 
 '-s', or '--settings' followed by PATH-TO-FILE/FILENAME.yaml 
-(e.g. python featureimportance.py -s settings_featureimportance.yaml).
-
-The selectio package provides to option to generate simulated data (see simdata.py) and
-as well as testing functions (see tests.py)
-
-Other models for feature selections exists such as PCA or SVD-based methods or
-univariate screening methods (t-test, correlation, etc.). However, some of these models consider either 
-only linear relationships, or do not take into account the potential multivariate nature of the data structure 
-(e.g., higher order interaction between variables).
-
-More models can be added in the folder 'models' following the example module structure, which includes at least:
-- a function with name 'factor_importance' that takes X and y as argument and one optional argument norm
-- the new module name should be added to __init_file__.py 
+(e.g. python selectio.py -s settings/settings_featureimportance.yaml).
 """
-
 import os
 import sys
 import yaml
@@ -55,19 +42,13 @@ import importlib
 from utils import plot_correlationbar, plot_feature_correlation_spearman
 
 # import all models for feature importance calculation
-#from models import xicor, blr, rf, rdt, mi, spearman
 from models import __all__ as _modelnames
 _list_models = []
 for modelname in _modelnames:
 	module = importlib.import_module('models.'+modelname)
 	_list_models.append(module)
 
-"""
-for model in _list_models:
-	importlib.reload(model)
-"""
-
-# Settings default yaml file
+# Settings for default yaml filename
 _fname_settings = 'settings_featureimportance.yaml'
 
 
@@ -108,7 +89,7 @@ class Fsel:
 			count_select += woe
 			print(f'Done, {woe.sum()} features selected.')
 		
-		# Select features based on majority vote of models:
+		# Select features based on majority vote from all models:
 		select = np.zeros(self.nfeatures).astype(int)
 		select[count_select >= self.nfeatures/2] = 1
 		self.dfmodels['selected'] = select
@@ -130,7 +111,6 @@ class Fsel:
 		woe = np.zeros_like(score)
 		woe[score >= min_score] = 1
 		return woe.astype(int)
-
 
 
 def main(fname_settings):
@@ -157,7 +137,6 @@ def main(fname_settings):
 	# Verify that data is cleaned:
 	assert df.select_dtypes(include=['number']).columns.tolist().sort() == data_fieldnames.sort(), 'Data contains non-numeric entries.'
 	assert df.isnull().sum().sum() == 0, "Data is not cleaned, please run preprocess_data.py before"
-
 
 	# Generate Spearman correlation matrix for X
 	print("Calculate Spearman correlation matrix...")
@@ -199,7 +178,6 @@ def main(fname_settings):
 	plot_correlationbar(scores_total, settings.name_features, settings.outpath, 'Combined-feature-importance.png', name_method = 'Combined Model Score', show = False)
 
 
-	
 if __name__ == '__main__':
 	# Parse command line arguments
 	parser = argparse.ArgumentParser(description='Calculating feature importance.')
@@ -213,4 +191,4 @@ if __name__ == '__main__':
 	# Run main function
 	main(args.settings)
 	# print out compute time of main function in seconds
-	print('Computational time of main function: {:.2f} seconds'.format((datetime.datetime.now() - datetime_now).total_seconds()))
+	print('Total computational time: {:.2f} seconds'.format((datetime.datetime.now() - datetime_now).total_seconds()))
