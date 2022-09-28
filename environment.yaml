@@ -1,0 +1,14 @@
+name: selectio
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - numpy
+  - 'scikit-learn>=1.0'
+  - pandas
+  - pyyaml
+  - scipy
+  - matplotlib
+  - jupyter
+  - notebook
+ 
