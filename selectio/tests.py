@@ -5,20 +5,21 @@ import yaml
 import shutil
 import numpy as np
 import importlib
+import pkg_resources
 
-from simdata import create_simulated_features
-from utils import plot_correlationbar
+from .simdata import create_simulated_features
+from .utils import plot_correlationbar
 
-import selectio
+from selectio import selectio
 
 # import all models for feature importance calculation
-from models import __all__ as _modelnames
+from .models import __all__ as _modelnames
 _list_models = []
 for modelname in _modelnames:
-	module = importlib.import_module('models.'+modelname)
+	module = importlib.import_module('.models.'+modelname, package='selectio')
 	_list_models.append(module)
 
-_fname_settings = selectio._fname_settings
+_fname_settings = pkg_resources.resource_filename('selectio', 'settings/settings_featureimportance.yaml')
 
 
 ### Test Models ####
@@ -27,7 +28,7 @@ def test_rf_factor_importance():
     """
     Test function for feature importance using random forest 
     """
-    from models import rf
+    from .models import rf
     dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'quadratic', noise = 0.05)
     X = dfsim[feature_names].values
     y = dfsim['Ytarget'].values
@@ -39,7 +40,7 @@ def test_blr_factor_importance():
     """
     Test function for bayesian log-power regression model
     """
-    from models import blr
+    from .models import blr
     dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'linear', noise = 0.05)
     X = dfsim[feature_names].values
     y = dfsim['Ytarget'].values
@@ -51,7 +52,7 @@ def test_xicor_factor_importance():
     """
     Test function for generalised model
     """
-    from models import xicor
+    from .models import xicor
     dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
     X = dfsim[feature_names].values
     y = dfsim['Ytarget'].values
@@ -63,7 +64,7 @@ def test_rdt_factor_importance():
     """
     Test function for randomized decision trees (RDT)
     """
-    from models import rdt
+    from .models import rdt
     dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
     X = dfsim[feature_names].values
     y = dfsim['Ytarget'].values
@@ -75,7 +76,7 @@ def test_mi_factor_importance():
     """
     Test function for mutual information model
     """
-    from models import mi
+    from .models import mi
     dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
     X = dfsim[feature_names].values
     y = dfsim['Ytarget'].values
@@ -87,7 +88,7 @@ def test_spearman_factor_importance():
     """
     Test function for Spearman Rank analysis
     """
-    from models import spearman
+    from .models import spearman
     dfsim, coefsim, feature_names = create_simulated_features(6, n_samples = 10000, model_order = 'quadratic', noise = 0.05)
     X = dfsim[feature_names].values
     y = dfsim['Ytarget'].values
@@ -115,7 +116,7 @@ def test_select():
     # Generate settings file for simulated data
     # (Note: you could also just simply set settings variables here, but this is also testing the settings file readout)
     fname_settings_sim = 'settings_featureimportance_simulation.yaml'
-    shutil.copyfile(os.path.join('./settings',_fname_settings), os.path.join(outpath, fname_settings_sim))
+    shutil.copyfile(_fname_settings, os.path.join(outpath, fname_settings_sim))
     # Change yaml file to simulation specifications:
     with open(os.path.join(outpath, fname_settings_sim), 'r') as f:
         settings_sim = yaml.load(f, Loader=yaml.FullLoader)

@@ -37,19 +37,21 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import importlib
+import pkg_resources
 
 # import some custom plotting utility functions
-from utils import plot_correlationbar, plot_feature_correlation_spearman
+from .utils import plot_correlationbar, plot_feature_correlation_spearman
 
 # import all models for feature importance calculation
-from models import __all__ as _modelnames
+from .models import __all__ as _modelnames
 _list_models = []
 for modelname in _modelnames:
-	module = importlib.import_module('models.'+modelname)
+	module = importlib.import_module('.models.'+modelname, package='selectio')
 	_list_models.append(module)
 
 # Settings for default yaml filename
-_fname_settings = 'settings_featureimportance.yaml'
+#_fname_settings = 'settings/settings_featureimportance.yaml'
+_fname_settings = pkg_resources.resource_filename('selectio', 'settings/settings_featureimportance.yaml')
 
 
 class Fsel:
@@ -183,7 +185,7 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Calculating feature importance.')
 	parser.add_argument('-s', '--settings', type=str, required=False,
 						help='Path and filename of settings file.',
-						default = os.path.join('./settings',_fname_settings))
+						default = _fname_settings)
 	args = parser.parse_args()
 
 	# Log computational time
