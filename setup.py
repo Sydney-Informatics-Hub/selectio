@@ -32,6 +32,8 @@ if __name__ == "__main__":
                                 ],
           python_requires   = '>=3.8',
           packages          = packages,
+          package_data      = {'selectio': ['settings/settings_featureimportance.yaml']},
+          include_package_data=True,
           classifiers       = ['Programming Language :: Python :: 3',
                                 'Operating System :: OS Independent',
                                ]
