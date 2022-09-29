@@ -45,14 +45,17 @@ Feature selection scores can be either computed directly using the class Fsel, e
 
 ```python
 from selectio.selectio import Fsel
+# Read in data X (nsample, nfeatures) and y (nsample)
 fsel = Fsel(X, y)
+# Score features and return results as dataframe:
 dfres = fsel.score_models()
 ```
 
 or with a settings yaml file that includes more functionality (including preprocessing and plotting), e.g:
 ```python
-import selectio
-selectio.selectio.main('settings_featureimportance_simulation.yaml')
+from selectio import selectio
+# Read in data from file, generate feature importance plots and save results as csv:
+selectio.main('settings_featureimportance.yaml')
 ```
 
 or if installed locally as standalone script with a settings file:
@@ -70,9 +73,23 @@ Alternatively, the settings file can be specified as a command line argument wit
 ## Simulation and Testing
 
 The selectio package also provides the option to generate simulated data (see `selectio.simdata`) 
-as well as multiple test functions (see `selectio.tests`).
+as well as multiple test functions (see `selectio.tests`), e.g.
 
-For examples see the provided Jupyter notebooks.
+```python
+from selectio import tests
+tests.test_select()
+```
+
+Simluated data can be generated via simdata:
+
+```python
+from selectio.simdata import create_simulated_features
+dfsim, coefsim, feature_names = create_simulated_features(8, n_samples = 100, model_order = 'quadratic', noise = 0.1)
+X = dfsim[feature_names].values
+y = dfsim['Ytarget'].values
+```
+
+For more examples see the provided Jupyter notebooks.
 
 ## Adding Model Extensions
 
