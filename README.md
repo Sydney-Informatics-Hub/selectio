@@ -1,4 +1,4 @@
-# Selectio: Multi-model Feature Importance Scoring and Auto Feature Selection.
+# Selectio: Multi-Model Feature Importance Scoring and Auto Feature Selection.
 
 This Python package provides computation of multiple feature importance scores, feature ranks,
 and automatically suggests a feature selection based on the majority vote of all models.
@@ -6,12 +6,12 @@ and automatically suggests a feature selection based on the majority vote of all
 ## Models
 
 Currently the following six models for feature importance scoring are included:
-- Spearman rank analysis (see 'models.spearman')
-- Correlation coefficient significance of linear/log-scaled Bayesian Linear Regression (see 'models.blr')
-- Random Forest Permutation test (see 'models.rf.py')
-- Random Decision Trees on various subsamples of data (see 'models.rdt.py')
-- Mutual Information Regression (see 'models.mi')
-- General correlation coefficients (see 'models.xicor')
+- Spearman rank analysis (see 'selectio.models.spearman')
+- Correlation coefficient significance of linear/log-scaled Bayesian Linear Regression (see 'selectio.models.blr')
+- Random Forest Permutation test (see 'selectio.models.rf')
+- Random Decision Trees on various subsamples of data (see 'selectio.models.rdt')
+- Mutual Information Regression (see 'selectio.models.mi')
+- General correlation coefficients (see 'selectio.models.xicor')
 
 Moreover, this package includes multiple functions for visualisation of feature ranking and hierarchical feature clustering.
 
@@ -41,17 +41,24 @@ See file environment.yaml for more details.
 
 ## Usage
 
-The feature selection score can be either computed directly using the class Fsel, e.g.
+Feature selection scores can be either computed directly using the class Fsel, e.g.
 
 ```python
-from selectio import Fsel
-fsel = selectio.Fsel(X, y)
+from selectio.selectio import Fsel
+fsel = Fsel(X, y)
 dfres = fsel.score_models()
 ```
 
-or can be called directly with more functionality (including preprocessing and plotting) using a settings yaml file:
+or with a settings yaml file that includes more functionality (including preprocessing and plotting), e.g:
+```python
+import selectio
+selectio.selectio.main('settings_featureimportance_simulation.yaml')
+```
+
+or if installed locally as standalone script with a settings file:
 ```bash
-python selectio.py -s fname_settings
+cd selectio
+python selectio.py -s <FILENAME>.yaml
 ```
 
 User settings such as input/output paths and all other options are set in the settings file 
@@ -62,8 +69,8 @@ Alternatively, the settings file can be specified as a command line argument wit
 
 ## Simulation and Testing
 
-The selectio package also provides the option to generate simulated data (see simdata.py) 
-as well as multiple test functions (see tests.py).
+The selectio package also provides the option to generate simulated data (see `selectio.simdata`) 
+as well as multiple test functions (see `selectio.tests`).
 
 For examples see the provided Jupyter notebooks.
 
@@ -73,7 +80,7 @@ More models for feature scoring can be added in the folder 'models' following th
 which includes at least:
 - a function with name 'factor_importance' that takes X and y as argument and one optional argument norm
 - a `__name__` and `__fullname__` attribute
-- adding the new module name to the __init_file__.py file in the folder models
+- adding the new module name to the `__init_file__.py` file in the folder models
 
 Other models for feature selections have been considered, such as PCA or SVD-based methods or
 univariate screening methods (t-test, correlation, etc.). However, some of these models consider either 
