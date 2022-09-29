@@ -1,22 +1,25 @@
 # Settings for featureimportance.py
 
-#### Input specifications ####
 # Input data path
-inpath: '../../../data/Llara/' #'../../../data/Woolandoon/Extracted_datasets/' 
-# File name with soil data and corresponding covariates
-infname: 'Splined_Clay_Sand_OC_COV.csv' 
+inpath: tests
 
-#### Output specifications ####
+# File name with soil data and corresponding covariates
+infname: SyntheticData_quadratic_8nfeatures_0.1noise.csv
+
 # Output results path
-outpath: '../../../results/Llara/featureimportance/'
-# 
-#outfname: 'Llara_processed.csv' #'ESP_Oodnadatta_covariates_xval_processed.csv' #'ESP_llara_COVARIATES_10fold_full.csv_processed.csv'
+outpath: test_featureimportance
+
 # Name of target for prediction (column name in dataframe)
-# e.g. 'Clay'       'Sand'     'OC_WB'
-name_target: 'OC_WB'  # Soil.EC.dS.m., Soil.pH
-# Name or List of covariate features (column names in infname)
-# (covariates in soil data to be considered )
-name_features: ['DEM_30', 'MrVBF', 'MrRTF', 'SlopeDeg', 
-'rad_dose', 'rad_u', 'rad_th', 'rad_k', 'silica',
-'NDVI_5',  'NDVI_50', 'NDVI_95', 'rain', 'temp',
- 'TWI', 'Aspect', 'Soiltype'] #'gamma_K', 'EM',  'yield', 
+name_target: Ytarget
+
+# Name or List of features (column names in infname)
+# (covariates to be considered )
+name_features: 
+- Feature_1
+- Feature_2
+- Feature_3
+- Feature_4
+- Feature_5
+- Feature_6
+- Feature_7
+- Feature_8
