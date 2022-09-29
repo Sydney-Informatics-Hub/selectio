@@ -27,6 +27,7 @@ Alternatively, the settings file can be specified as a command line argument wit
 '-s', or '--settings' followed by PATH-TO-FILE/FILENAME.yaml 
 (e.g. python selectio.py -s settings/settings_featureimportance.yaml).
 """
+
 import os
 import sys
 import yaml
@@ -50,13 +51,16 @@ for modelname in _modelnames:
 	_list_models.append(module)
 
 # Settings for default yaml filename
-#_fname_settings = 'settings/settings_featureimportance.yaml'
 _fname_settings = pkg_resources.resource_filename('selectio', 'settings/settings_featureimportance.yaml')
 
 
 class Fsel:
 	"""
 	Auto Feature Selection
+
+	Input:
+		X: array with shape (nsample, nfeatures)
+		y: vector with shape (nsample,)
 	"""
 	def __init__(self, X, y):
 		
