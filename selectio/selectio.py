@@ -107,7 +107,7 @@ class Fsel:
 		
 		# Select features based on majority vote from all models:
 		select = np.zeros(self.nfeatures).astype(int)
-		select[count_select >= self.nfeatures/2] = 1
+		select[count_select >= round(self.nmodels/2)] = 1
 		self.dfmodels['selected'] = select
 		
 		return self.dfmodels
