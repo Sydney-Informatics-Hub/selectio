@@ -1,5 +1,5 @@
 """
-Multi-model Feature Importance Scoring and auto Feature Selection.
+Multi-model Feature Importance Scoring and Auto Feature Selection.
 ------------------------------------------------------------------- 
 
 This Python package returns multiple feature importance scores, feature ranks,
