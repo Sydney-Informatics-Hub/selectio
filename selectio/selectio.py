@@ -42,9 +42,10 @@ import numpy as np
 import pandas as pd
 import importlib
 import pkg_resources
+import matplotlib.pyplot as plt
 
 # import some custom plotting utility functions
-from .utils import plot_correlationbar, plot_feature_correlation_spearman
+from .utils import plot_correlationbar, plot_feature_correlation_spearman, gradientbars
 
 # import all models for feature importance calculation
 from .models import __all__ as _modelnames
@@ -128,6 +129,40 @@ class Fsel:
 		woe = np.zeros_like(score)
 		woe[score >= min_score] = 1
 		return woe.astype(int)
+
+
+def plot_scores(dfscores, feature_names, outpath, show = False):
+	"""
+	Generates overview plot of all scores and saves in settings output path
+
+	Input:
+		dfscores: pandas dataframe with score results
+		feature_names: list of fetaure names, must match order in dfscores
+		outpath: output directory
+		show: boolean, if True shows matplotlib plot
+	"""
+	
+	fig, ax = plt.subplots(3,2, figsize = (9,9))
+	j =0 
+	for i in range(len(_modelnames)):
+		modelname = _modelnames[i]
+		model_fullname = _list_models[i].__fullname__
+		scores = dfscores['score_' + modelname].values
+		sorted_idx = scores.argsort()
+		ypos = np.arange(len(scores))
+		if i >= 3:
+			i -= 3
+			j = 1
+		bar = ax[i, j].barh(ypos, scores[sorted_idx], tick_label = np.asarray(feature_names)[sorted_idx], align='center')
+		gradientbars(bar, scores[sorted_idx])
+		ax[i, j].set_title(f'{model_fullname}')	
+	plt.tight_layout()
+	fname_out = f'Models-feature-importances.png'
+	plt.tight_layout()
+	plt.savefig(os.path.join(outpath, fname_out), dpi = 200)
+	if show:
+		plt.show()
+	plt.close('all')
 
 
 def main(fname_settings):
