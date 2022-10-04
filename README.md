@@ -15,6 +15,9 @@ Currently the following six models for feature importance scoring are included:
 
 Moreover, this package includes multiple functions for visualisation of feature ranking and hierarchical feature clustering.
 
+Note that the current feature importance models support numerical data only. Categorical data 
+will need to be encoded to numerical features.
+
 ## Installation
 
 ```bash
@@ -72,8 +75,8 @@ Alternatively, the settings file can be specified as a command line argument wit
 
 ## Simulation and Testing
 
-The selectio package also provides the option to generate simulated data (see `selectio.simdata`) 
-as well as multiple test functions (see `selectio.tests`), e.g.
+The selectio package provides the option to generate simulated data (see `selectio.simdata`) 
+and includes multiple test functions (see `selectio.tests`), e.g.
 
 ```python
 from selectio import tests
@@ -91,7 +94,7 @@ y = dfsim['Ytarget'].values
 
 For more examples see the provided Jupyter notebooks.
 
-## Adding Model Extensions
+## Adding Custom Model Extensions
 
 More models for feature scoring can be added in the folder 'models' following the existing scripts as example, 
 which includes at least:

@@ -15,6 +15,9 @@ Currently the following six models for feature importance scoring are included:
 - Mutual Information Regression (see 'models.mi')
 - General correlation coefficients (see 'models.xicor')
 
+Note that the current feature importance models support numerical data only. Categorical data 
+will need to be encoded to numerical features.
+
 ## Usage
 
 The feature selection score can be either computed directly using the class Fsel, or can be called directly 
