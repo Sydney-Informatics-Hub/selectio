@@ -83,6 +83,7 @@ class Fsel:
 		"""
 		# Loop over all models and calculate normalized feature scores
 		count_select = np.zeros(self.nfeatures).astype(int)
+		scores_total = np.zeros(self.X.shape[1])
 		for i in range(self.nmodels):
 			model = _list_models[i]
 			modelname = _modelnames[i]
@@ -93,12 +94,19 @@ class Fsel:
 			woe = self.eval_score(corr)
 			self.dfmodels['woe_' + modelname] = woe
 			count_select += woe
+			# Add to total scores
+			scores_total += corr * woe
 			print(f'Done, {woe.sum()} features selected.')
+
+		# normalize and save combined score
+		scores_total /= np.sum(scores_total)
+		self.dfmodels['score_combined'] = np.round(scores_total,4)
 		
 		# Select features based on majority vote from all models:
 		select = np.zeros(self.nfeatures).astype(int)
 		select[count_select >= self.nfeatures/2] = 1
 		self.dfmodels['selected'] = select
+		
 		return self.dfmodels
 
 
@@ -155,14 +163,13 @@ def main(fname_settings):
 	fsel = Fsel(X,y)
 	dfres = fsel.score_models()
 
-	dfres['name_features'] = settings.name_features
+	dfres.insert(loc = 0, column = 'name_features', value = settings.name_features)
+
 	print('Features selected: ', dfres.loc[dfres.selected == 1, 'name_features'])
 	
 	# Save results as csv
 	dfres.to_csv(os.path.join(settings.outpath, 'feature-importance_scores.csv'), index_label = 'Feature_index')
 
-	# initialise array for total score across all models
-	scores_total = np.zeros(X.shape[1])
 	# Plot scores
 	print("Generating score plots..")
 	for i in range(len(_modelnames)):
@@ -174,14 +181,12 @@ def main(fname_settings):
 			model_label = modelname
 			model_fullname = modelname
 		scores = dfres['score_' + modelname].values
-		woe = dfres['woe_' + modelname].values
 		plot_correlationbar(scores, settings.name_features, settings.outpath, f'{model_label}-feature-importance.png', name_method = model_fullname, show = False)
 
-		# Add to total scores
-		scores_total += scores * woe
 	# plot total score
-	scores_total /= np.sum(scores_total)
+	scores_total = dfres['score_combined'].values
 	plot_correlationbar(scores_total, settings.name_features, settings.outpath, 'Combined-feature-importance.png', name_method = 'Combined Model Score', show = False)
+	print('COMPLETED.')
 
 
 if __name__ == '__main__':
@@ -197,4 +202,4 @@ if __name__ == '__main__':
 	# Run main function
 	main(args.settings)
 	# print out compute time of main function in seconds
-	print('Total computational time: {:.2f} seconds'.format((datetime.datetime.now() - datetime_now).total_seconds()))
+	#print('Total computational time: {:.2f} seconds'.format((datetime.datetime.now() - datetime_now).total_seconds()))
