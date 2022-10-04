@@ -132,10 +132,15 @@ class Fsel:
 
 def main(fname_settings):
 	"""
-	Main function for running the script.
+	Main function for running selectio.
+
+	Generating feature importance scores and selection. 
+	Results are saved as csv file and scores are plotted as png.
+
+	See settings file for input and output.
 
 	Input:
-		fname_settings: path and filename to settings file
+		fname_settings: path and filename to yaml settings file (see examples)
 	"""
 	# Load settings from yaml file
 	with open(fname_settings, 'r') as f:
@@ -174,7 +179,7 @@ def main(fname_settings):
 	dfres.to_csv(os.path.join(settings.outpath, 'feature-importance_scores.csv'), index_label = 'Feature_index')
 
 	# Plot scores
-	print("Generating score plots..")
+	print("Generating score plots ...")
 	for i in range(len(_modelnames)):
 		modelname = _modelnames[i]
 		try:
