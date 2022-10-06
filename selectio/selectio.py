@@ -20,7 +20,7 @@ will need to be encoded to numerical features.
 
 ## Usage
 
-The feature selection score can be either computed directly using the class Fsel, or can be called directly 
+The feature selection score can be either computed directly using selectio.Fsel(X,y), or can be computed 
 with more functionality (including preprocessing and plotting) using a settings yaml file:
 python selectio.py -s fname_settings
 
@@ -29,6 +29,8 @@ User settings such as input/output paths and all other options are set in the se
 Alternatively, the settings file can be specified as a command line argument with: 
 '-s', or '--settings' followed by PATH-TO-FILE/FILENAME.yaml 
 (e.g. python selectio.py -s settings/settings_featureimportance.yaml).
+
+For a more detailed example how to use selectio please check the notebooks.
 """
 
 import os
@@ -131,7 +133,7 @@ class Fsel:
 		return woe.astype(int)
 
 
-def plot_scores(dfscores, feature_names, outpath, show = False):
+def plot_allscores(dfscores, feature_names, outpath, show = False):
 	"""
 	Generates overview plot of all scores and saves in settings output path
 
@@ -208,27 +210,19 @@ def main(fname_settings):
 
 	dfres.insert(loc = 0, column = 'name_features', value = settings.name_features)
 
-	print('Features selected: ', dfres.loc[dfres.selected == 1, 'name_features'])
+	print('Feature selection: ')
+	dfselect = dfres.loc[dfres.selected == 1, ['name_features', 'score_combined']]
+	print(dfselect.sort_values('score_combined', ascending=False))
 	
 	# Save results as csv
 	dfres.to_csv(os.path.join(settings.outpath, 'feature-importance_scores.csv'), index_label = 'Feature_index')
 
 	# Plot scores
 	print("Generating score plots ...")
-	for i in range(len(_modelnames)):
-		modelname = _modelnames[i]
-		try:
-			model_label = _list_models[i].__name__
-			model_fullname = _list_models[i].__fullname__
-		except:
-			model_label = modelname
-			model_fullname = modelname
-		scores = dfres['score_' + modelname].values
-		plot_correlationbar(scores, settings.name_features, settings.outpath, f'{model_label}-feature-importance.png', name_method = model_fullname, show = False)
+	plot_allscores(dfres, settings.name_features, settings.outpath)
 
-	# plot total score
-	scores_total = dfres['score_combined'].values
-	plot_correlationbar(scores_total, settings.name_features, settings.outpath, 'Combined-feature-importance.png', name_method = 'Combined Model Score', show = False)
+	# Plot combined score
+	plot_correlationbar(dfres['score_combined'].values, settings.name_features, settings.outpath, 'Combined-feature-importance.png', name_method = 'Combined Model Score', show = False)
 	print('COMPLETED.')
 
 
@@ -241,8 +235,10 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 	# Log computational time
-	datetime_now = datetime.datetime.now()
+	#datetime_now = datetime.datetime.now()
+
 	# Run main function
 	main(args.settings)
+
 	# print out compute time of main function in seconds
 	#print('Total computational time: {:.2f} seconds'.format((datetime.datetime.now() - datetime_now).total_seconds()))
