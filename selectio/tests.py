@@ -148,11 +148,11 @@ def test_select():
     print('Test completed ok.')
 
 
-    ### Other test functions ### 
+### Other test functions ### 
 
-    def test_plot_correlationbar(outpath):
-        """
-        Test function for plot_correlationbar
-        """
-        dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'quadratic', noise = 0.05)
-        plot_correlationbar(coefsim, feature_names, outpath, 'test_plot_correlationbar.png', show = True)
+def test_plot_correlationbar(outpath):
+    """
+    Test function for plot_correlationbar
+    """
+    dfsim, coefsim, feature_names = create_simulated_features(6, model_order = 'quadratic', noise = 0.05)
+    plot_correlationbar(coefsim, feature_names, outpath, 'test_plot_correlationbar.png', show = True)
