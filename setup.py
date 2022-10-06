@@ -5,7 +5,7 @@ except ImportError:
 from os import path
 import io
 
-PYPI_VERSION = '0.1.1'
+PYPI_VERSION = '0.1.2'
 
 this_directory = path.abspath(path.dirname(__file__))
 with io.open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
@@ -16,7 +16,6 @@ packages = find_packages()
 if __name__ == "__main__":
     setup(name = 'selectio',
           author            = "Sebastian Haan",
-          author_email      = "sebhaan@sigmaterra.com",
           url               = "https://github.com/sebhaan/selectio",
           version           = PYPI_VERSION ,
           description       = "Multi-model Feature Importance Scoring and Auto Feature Selection",
