@@ -135,7 +135,7 @@ class Fsel:
 
 def plot_allscores(dfscores, feature_names, outpath, show = False):
 	"""
-	Generates overview plot of all scores and saves in settings output path
+	Generates overview plot of all scores and saves in output path
 
 	Input:
 		dfscores: pandas dataframe with score results
@@ -144,9 +144,9 @@ def plot_allscores(dfscores, feature_names, outpath, show = False):
 		show: boolean, if True shows matplotlib plot
 	"""
 	
-	fig, ax = plt.subplots(3,2, figsize = (9,9))
+	fig, ax = plt.subplots(3,2, figsize = (8,9))
 	j =0 
-	for i in range(len(_modelnames)):
+	for i in range(6):
 		modelname = _modelnames[i]
 		model_fullname = _list_models[i].__fullname__
 		scores = dfscores['score_' + modelname].values
@@ -158,10 +158,12 @@ def plot_allscores(dfscores, feature_names, outpath, show = False):
 		bar = ax[i, j].barh(ypos, scores[sorted_idx], tick_label = np.asarray(feature_names)[sorted_idx], align='center')
 		gradientbars(bar, scores[sorted_idx])
 		ax[i, j].set_title(f'{model_fullname}')	
+	ax[2, 0].set_xlabel('Feature Importance Score')	
+	ax[2, 1].set_xlabel('Feature Importance Score')
 	plt.tight_layout()
 	fname_out = f'Models-feature-importances.png'
 	plt.tight_layout()
-	plt.savefig(os.path.join(outpath, fname_out), dpi = 200)
+	plt.savefig(os.path.join(outpath, fname_out), dpi = 300)
 	if show:
 		plt.show()
 	plt.close('all')
