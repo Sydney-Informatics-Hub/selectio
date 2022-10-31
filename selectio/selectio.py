@@ -144,7 +144,7 @@ def plot_allscores(dfscores, feature_names, outpath, show = False):
 		show: boolean, if True shows matplotlib plot
 	"""
 	
-	fig, ax = plt.subplots(3,2, figsize = (8,9))
+	fig, ax = plt.subplots(3,2, figsize = (10,8))
 	j =0 
 	for i in range(6):
 		modelname = _modelnames[i]
