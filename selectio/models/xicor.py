@@ -44,7 +44,7 @@ def factor_importance(X, y, norm = True):
     # set correlation coefficient to zero for non-significant p_values (P > 0.01)
     corr[pvals>0.01] = 0
     if norm:
-        corr /= corr.max()
+        corr /= np.sum(corr)
     return corr
 
 
