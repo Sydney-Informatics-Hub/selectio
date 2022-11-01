@@ -1,11 +1,11 @@
 try:
     from setuptools import setup, find_packages
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setupp
 from os import path
 import io
 
-PYPI_VERSION = '0.1.2'
+PYPI_VERSION = '0.1.3'
 
 this_directory = path.abspath(path.dirname(__file__))
 with io.open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
