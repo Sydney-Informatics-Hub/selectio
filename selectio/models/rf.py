@@ -25,7 +25,7 @@ def set_njobs():
 
 
 
-def factor_importance(X_train, y_train, norm = True, max_samples = 5000):
+def factor_importance(X_train, y_train, norm = True, max_samples = 2000):
 	"""
 	Factor importance using RF permutation test and optional corrections 
 	for multi-collinarity (correlated) features. 
@@ -35,6 +35,10 @@ def factor_importance(X_train, y_train, norm = True, max_samples = 5000):
 	Note that for large datasets, it is recommended to set max_samples. 
 	This option may provide less accurate importance estimates, but
     it keeps the method tractable.
+
+	The R2 measure is selected as score metric. For other score metrics see:
+
+	https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
 
 	Input:
 		X: input data matrix with shape (npoints,nfeatures)
@@ -60,7 +64,7 @@ def factor_importance(X_train, y_train, norm = True, max_samples = 5000):
 		n_repeats=20, 
 		random_state=42, 
 		n_jobs=n_jobs, 
-		scoring = "neg_mean_squared_error", 
+		scoring = "r2",
 		max_samples = max_samples)
 
 	imp_mean_corr = result.importances_mean
@@ -68,7 +72,7 @@ def factor_importance(X_train, y_train, norm = True, max_samples = 5000):
 
 	# Set non significant features to zero:
 	imp_mean_corr[imp_mean_corr / imp_std_corr < 3] = 0
-	imp_mean_corr[imp_mean_corr < 0.001] = 0
+	imp_mean_corr[imp_mean_corr < 0.01] = 0
 	if norm:
 		imp_mean_corr /= np.sum(imp_mean_corr)
 	return imp_mean_corr
