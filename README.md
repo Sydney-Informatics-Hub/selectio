@@ -16,7 +16,7 @@ Currently the following six models for feature importance scoring are included:
 Moreover, this package includes multiple functions for visualisation of feature ranking and hierarchical feature clustering.
 
 Note that the current feature importance models support numerical data only. Categorical data 
-will need to be encoded to numerical features.
+will need to be encoded to numerical features beforehand.
 
 ## Installation
 
@@ -44,7 +44,9 @@ See file environment.yaml for more details.
 
 ## Usage
 
-Feature selection scores can be either computed directly using the class Fsel, e.g.
+There are multiple options to compute feature selection scores 
+
+Option 1) computed directly using the class Fsel, e.g.
 
 ```python
 from selectio.selectio import Fsel
@@ -53,15 +55,18 @@ fsel = Fsel(X, y)
 # Score features and return results as dataframe:
 dfres = fsel.score_models()
 ```
+This returns a table with all scores and feature selections. 
 
-or with a settings yaml file that includes more functionality (including preprocessing and plotting), e.g:
+Option 2) with a settings yaml file (template provided) that includes more functionality (including preprocessing and plotting), e.g:
 ```python
 from selectio import selectio
 # Read in data from file, generate feature importance plots and save results as csv:
 selectio.main('settings_featureimportance.yaml')
 ```
+This will automatically save all scores and selections in csv file and create multiple score plots.
 
-or if installed locally as standalone script with a settings file:
+
+Option 3) if installed locally as standalone script with a settings file:
 ```bash
 cd selectio
 python selectio.py -s <FILENAME>.yaml
@@ -73,6 +78,32 @@ Alternatively, the settings file can be specified as a command line argument wit
 '-s', or '--settings' followed by PATH-TO-FILE/FILENAME.yaml 
 (e.g. python selectio.py -s settings/settings_featureimportance.yaml).
 
+## Settings YAML file
+
+For settings file template, see [here](https://github.com/sebhaan/selectio/blob/main/selectio/settings/settings_featureimportance.yaml)
+
+The main settings are:
+```yaml
+# Input data path
+inpath: ...
+
+# File name with soil data and corresponding covariates
+infname: ...
+
+# Output results path
+outpath: ...
+
+# Name of target for prediction (column name in dataframe)
+name_target: ...
+
+# Name or List of features (column names in infname)
+# (covariates to be considered )
+name_features: 
+- ...
+- ...
+```
+
+
 ## Simulation and Testing
 
 The selectio package provides the option to generate simulated data (see `selectio.simdata`) 
@@ -83,7 +114,7 @@ from selectio import tests
 tests.test_select()
 ```
 
-Simluated data can be generated via simdata:
+Simulated data can be generated via simdata:
 
 ```python
 from selectio.simdata import create_simulated_features
@@ -106,7 +137,7 @@ Other models for feature selections have been considered, such as PCA or SVD-bas
 univariate screening methods (t-test, correlation, etc.). However, some of these models consider either 
 only linear relationships, or do not take into account the potential multivariate nature of the data structure 
 (e.g., higher order interaction between variables). Note that not all included models are completely generalizable, 
-such as Bayesian regression and Spearman ranking given their dependence on monotonic functional behaviour.
+such as Bayesian regression and Spearman ranking given their dependence on monotonic functional behavior.
 
 Since most models have some limitations or rely on certain data assumptions, it is important to consider a variety 
 of techniques for feature selection and to apply model cross-validations.
