@@ -47,7 +47,9 @@ import pkg_resources
 import matplotlib.pyplot as plt
 
 # import some custom plotting utility functions
-from .utils import plot_correlationbar, plot_feature_correlation_spearman, gradientbars
+from .utils import (plot_correlationbar, plot_feature_correlation_spearman, gradientbars, 
+	plot_importance_map, plot_importance_panels)
+
 
 # import all models for feature importance calculation
 from .models import __all__ as _modelnames
@@ -55,6 +57,7 @@ _list_models = []
 for modelname in _modelnames:
 	module = importlib.import_module('.models.'+modelname, package='selectio')
 	_list_models.append(module)
+_model_fullnames = [model.__fullname__ for model in _list_models]
 
 # Settings for default yaml filename
 _fname_settings = pkg_resources.resource_filename('selectio', 'settings/settings_featureimportance.yaml')
@@ -133,40 +136,20 @@ class Fsel:
 		return woe.astype(int)
 
 
-def plot_allscores(dfscores, feature_names, outpath, show = False):
+def plot_allscores(dfscores, outpath, show = False):
 	"""
 	Generates overview plot of all scores and saves in output path
 
 	Input:
-		dfscores: pandas dataframe with score results
-		feature_names: list of fetaure names, must match order in dfscores
+		dfscores: pandas dataframe with score results for all features and models
 		outpath: output directory
 		show: boolean, if True shows matplotlib plot
 	"""
-	
-	fig, ax = plt.subplots(3,2, figsize = (10,8))
-	j =0 
-	for i in range(6):
-		modelname = _modelnames[i]
-		model_fullname = _list_models[i].__fullname__
-		scores = dfscores['score_' + modelname].values
-		sorted_idx = scores.argsort()
-		ypos = np.arange(len(scores))
-		if i >= 3:
-			i -= 3
-			j = 1
-		bar = ax[i, j].barh(ypos, scores[sorted_idx], tick_label = np.asarray(feature_names)[sorted_idx], align='center')
-		gradientbars(bar, scores[sorted_idx])
-		ax[i, j].set_title(f'{model_fullname}')	
-	ax[2, 0].set_xlabel('Feature Importance Score')	
-	ax[2, 1].set_xlabel('Feature Importance Score')
-	plt.tight_layout()
-	fname_out = f'Models-feature-importances.png'
-	plt.tight_layout()
-	plt.savefig(os.path.join(outpath, fname_out), dpi = 300)
-	if show:
-		plt.show()
-	plt.close('all')
+	# plot heatmap of feature importances
+	plot_importance_map(dfscores, _modelnames, _model_fullnames, outpath, show = show)
+	# plot feature importance scores for each score model
+	plot_importance_panels(dfscores, _modelnames, _model_fullnames, outpath, show = show)
+
 
 
 def main(fname_settings):
@@ -219,9 +202,9 @@ def main(fname_settings):
 	# Save results as csv
 	dfres.to_csv(os.path.join(settings.outpath, 'feature-importance_scores.csv'), index_label = 'Feature_index')
 
-	# Plot scores
-	print("Generating score plots ...")
-	plot_allscores(dfres, settings.name_features, settings.outpath)
+	# Plot scores overview
+	print("Generating overview score plots ...")
+	plot_allscores(dfres, settings.outpath, show = False)
 
 	# Plot combined score
 	plot_correlationbar(dfres['score_combined'].values, settings.name_features, settings.outpath, 'Combined-feature-importance.png', name_method = 'Combined Model Score', show = False)
