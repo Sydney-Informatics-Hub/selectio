@@ -27,7 +27,7 @@ Alternatively, the settings file can be specified as a command line argument wit
 For more details see: https://github.com/sebhaan/selectio
 """
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 __title__ = "Selectio: Multi-model Feature Importance Scoring and Auto Feature Selection"
 __description__ = """
 This Python package provides computation of multiple feature importance scores, feature ranks,
