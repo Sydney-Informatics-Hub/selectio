@@ -114,16 +114,8 @@ from selectio import tests
 tests.test_select()
 ```
 
-Simulated data can be generated via simdata:
+For more examples and how to create simulated  via `simdata.py`, see the provided Jupyter notebooks `feature_selection.ipynb`.
 
-```python
-from selectio.simdata import create_simulated_features
-dfsim, coefsim, feature_names = create_simulated_features(8, n_samples = 100, model_order = 'quadratic', noise = 0.1)
-X = dfsim[feature_names].values
-y = dfsim['Ytarget'].values
-```
-
-For more examples see the provided Jupyter notebooks.
 
 ## Adding Custom Model Extensions
 
