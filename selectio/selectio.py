@@ -119,7 +119,7 @@ class Fsel:
 		return self.dfmodels
 
 
-	def eval_score(self, score, woe_min = 0.01):
+	def eval_score(self, score, woe_min = 0.02):
 		"""
 		Evaluate multi-model feature importance scores and select features based on majority vote
 
