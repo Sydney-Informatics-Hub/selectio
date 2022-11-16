@@ -110,7 +110,7 @@ def test_select():
 
     # Generate simulated data
     print("Generate simulated data...")
-    dfsim, coefsim, feature_names_sim = create_simulated_features(8, outpath = outpath)
+    dfsim, coefsim, feature_names_sim, outfname_sim = create_simulated_features(8, 5, outpath = outpath)
     print(f'True coefficients of simulated data are: {np.round(coefsim,4)}')
 
     # Generate settings file for simulated data
@@ -122,7 +122,7 @@ def test_select():
         settings_sim = yaml.load(f, Loader=yaml.FullLoader)
     settings_sim['name_features'] = feature_names_sim
     settings_sim['name_target'] = 'Ytarget'
-    settings_sim['infname'] = 'SyntheticData_quadratic_8nfeatures_0.1noise.csv'
+    settings_sim['infname'] = outfname_sim
     settings_sim['inpath'] = outpath
     settings_sim['outpath'] = outpath
     with open(os.path.join(outpath, fname_settings_sim), 'w') as f:
