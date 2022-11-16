@@ -7,12 +7,18 @@ import itertools
 from sklearn.datasets import make_regression
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-def create_simulated_features(n_features, outpath = None, n_samples = 200, model_order = 'quadratic', correlated = False, noise= 0.1):
+def create_simulated_features(n_features, 
+	n_informative,
+	outpath = None, 
+	n_samples = 200, 
+	model_order = 'linear', 
+	correlated = False, noise= 0.1):
 	"""
 	Generate synthetic datasets for testing
 
 	Input:
 		n_features: number of features
+		n_informative: number of informative features
 		outpath: path to save simulated data
 		n_samples: number of samples	
 		model_order: order of the model, either 'linear', 'quadratic', or 'cubic'
@@ -23,12 +29,13 @@ def create_simulated_features(n_features, outpath = None, n_samples = 200, model
 		dfsim: dataframe with simulated features
 		coefsim: simulated coefficients
 		feature_names: list of feature names
+		outfname: output filename
 	"""
 	if correlated:
 		n_rank = int(n_features/2)
 	else:
 		n_rank = None
-	Xsim, ysim, coefsim = make_regression(n_samples=n_samples, n_features = n_features, n_informative=int(n_features/2), n_targets=1, 
+	Xsim, ysim, coefsim = make_regression(n_samples=n_samples, n_features = n_features, n_informative = n_informative, n_targets=1, 
 		bias=0.5, noise=noise, shuffle=False, coef=True, random_state=42, effective_rank = n_rank)	
 	feature_names = ["Feature_" + str(i+1) for i in range(n_features)]
 	coefsim /= 100
@@ -71,7 +78,8 @@ def create_simulated_features(n_features, outpath = None, n_samples = 200, model
 	df = pd.DataFrame(data, columns = header)
 	if outpath is not None:
 		os.makedirs(outpath, exist_ok=True)
-		df.to_csv(os.path.join(outpath, f'SyntheticData_{model_order}_{n_features}nfeatures_{noise}noise.csv'), index = False)
+		outfname = f'SyntheticData_{model_order}_{n_features}nfeatures_{noise}noise.csv'
+		df.to_csv(os.path.join(outpath, outfname), index = False)
 		df_coef = pd.DataFrame(coefsim.reshape(-1,1).T, columns = feature_names)
 		df_coef.to_csv(os.path.join(outpath, f'SyntheticData_coefficients_{model_order}_{n_features}nfeatures_{noise}noise.csv'), index = False)
-	return df, coefsim, feature_names
+	return df, coefsim, feature_names, outfname
