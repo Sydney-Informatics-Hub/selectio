@@ -1,11 +1,10 @@
 # Selectio: Multi-Model Feature Importance Scoring and Auto Feature Selection.
 
-This Python package provides computation of multiple feature importance scores, feature ranks,
-and automatically suggests a feature selection based on the majority vote of all models.
+This Python package provides multiple feature importance scores and automatically suggests a feature selection based on the majority vote of all models.
 
 ## Models
 
-Currently the following six models for feature importance scoring are included:
+Currently the following models for feature importance scoring are included:
 - Spearman rank analysis (see 'selectio.models.spearman')
 - Correlation coefficient significance of linear/log-scaled Bayesian Linear Regression (see 'selectio.models.blr')
 - Random Forest Permutation test (see 'selectio.models.rf')
@@ -13,10 +12,16 @@ Currently the following six models for feature importance scoring are included:
 - Mutual Information Regression (see 'selectio.models.mi')
 - General correlation coefficients (see 'selectio.models.xicor')
 
-Moreover, this package includes multiple functions for visualisation of feature ranking and hierarchical feature clustering.
+## Feature Importance Scores and Cross-Correlations
 
-Note that the current feature importance models support numerical data only. Categorical data 
-will need to be encoded to numerical features beforehand.
+The current feature importance models support numerical data only. Categorical data will need to be encoded to numerical features beforehand.
+
+All model scores are normalized to unity, i.e., $\sum _i^{N_{features}} score_i = 1$
+
+This package includes multiple functions for visualisation of the importance scores and automatic feature ranking. 
+	
+Feature-to-feature correlations are automatically clustered using hierarchical clustering of the Spearman correlation coefficients (for more details see `utils.plot_feature_correlation_spearman`).
+
 
 ## Installation
 
@@ -24,7 +29,7 @@ will need to be encoded to numerical features beforehand.
 pip install selectio
 ```
 
-or for development as conda environment:
+or for development in a conda environment:
 
 ```bash
 conda env update --file environment.yaml
@@ -46,7 +51,17 @@ See file environment.yaml for more details.
 
 There are multiple options to compute feature selection scores 
 
-Option 1) computed directly using the class Fsel, e.g.
+### Option 1) 
+with a settings yaml file (template provided) that includes all processing and plotting functionality, e.g:
+```python
+from selectio import selectio
+# Read in data from file, generate feature importance plots and save results as csv:
+selectio.main('settings_featureimportance.yaml')
+```
+This will automatically save all scores and selections in csv file and create multiple score plots.
+
+### Option 2) 
+computed directly using the class selectio.Fsel, e.g.
 
 ```python
 from selectio.selectio import Fsel
@@ -55,18 +70,11 @@ fsel = Fsel(X, y)
 # Score features and return results as dataframe:
 dfres = fsel.score_models()
 ```
-This returns a table with all scores and feature selections. 
-
-Option 2) with a settings yaml file (template provided) that includes more functionality (including preprocessing and plotting), e.g:
-```python
-from selectio import selectio
-# Read in data from file, generate feature importance plots and save results as csv:
-selectio.main('settings_featureimportance.yaml')
-```
-This will automatically save all scores and selections in csv file and create multiple score plots.
+This returns a table with all scores and feature selections. See for more details and visualisation of scores "Option 2)" in the example notebook `feature_selection.ipynb`.
 
 
-Option 3) if installed locally as standalone script with a settings file:
+### Option 3) 
+as standalone script with a settings file:
 ```bash
 cd selectio
 python selectio.py -s <FILENAME>.yaml
@@ -84,19 +92,15 @@ For settings file template, see [here](https://github.com/sebhaan/selectio/blob/
 
 The main settings are:
 ```yaml
-# Input data path
+# Input data path:
 inpath: ...
-
-# File name with soil data and corresponding covariates
+# File name with soil data and corresponding covariates:
 infname: ...
-
-# Output results path
+# Output results path:
 outpath: ...
-
-# Name of target for prediction (column name in dataframe)
+# Name of target for prediction (column name in dataframe):
 name_target: ...
-
-# Name or List of features (column names in infname)
+# Name or List of features (column names in infname):
 # (covariates to be considered )
 name_features: 
 - ...
@@ -136,6 +140,6 @@ of techniques for feature selection and to apply model cross-validations.
 
 ## License
 
-MIT License
+LGPL License
 
 Copyright (c) 2022 Sebastian Haan
