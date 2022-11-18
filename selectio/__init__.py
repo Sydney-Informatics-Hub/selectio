@@ -39,8 +39,8 @@ and the companion example notebook in the 'notebooks' folder.
 __version__ = "0.1.7"
 __title__ = "Selectio: Multi-model Feature Importance Scoring and Auto Feature Selection"
 __description__ = """
-This Python package provides computation of multiple feature importance scores, feature ranks,
-and automatically suggests a feature selection based on the majority vote of all models.
+This Python package provides computation of multiple feature importance scores and automatically 
+suggests a feature selection based on the majority vote of all models.
 """
 __uri__ = "https://github.com/sebhaan/selectio"
 __doc__ = __description__ + " <" + __uri__ + ">"
