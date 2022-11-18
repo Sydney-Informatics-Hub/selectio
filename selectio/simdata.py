@@ -82,4 +82,6 @@ def create_simulated_features(n_features,
 		df.to_csv(os.path.join(outpath, outfname), index = False)
 		df_coef = pd.DataFrame(coefsim.reshape(-1,1).T, columns = feature_names)
 		df_coef.to_csv(os.path.join(outpath, f'SyntheticData_coefficients_{model_order}_{n_features}nfeatures_{noise}noise.csv'), index = False)
+	else:
+		outfname = None
 	return df, coefsim, feature_names, outfname
