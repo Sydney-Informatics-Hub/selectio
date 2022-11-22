@@ -28,5 +28,8 @@ def factor_importance(X_train, y_train, norm = True):
 
     mi = mutual_info_regression(X_train, y_train)
     if norm:
-        mi /= np.sum(mi)
+        if np.sum(mi) > 0:
+            mi /= np.sum(mi)
+        else:
+            mi = np.zeros(len(mi))	
     return mi

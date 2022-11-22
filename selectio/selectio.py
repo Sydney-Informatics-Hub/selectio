@@ -98,6 +98,7 @@ class Fsel:
 			modelname = _modelnames[i]
 			print(f'Computing scores for model {modelname}...')
 			corr = model.factor_importance(self.X, self.y, norm = True)
+			corr[np.isnan(corr)] = 0
 			self.dfmodels['score_' + modelname] = np.round(corr, 4)
 			# Calculate which feature scores accepted
 			woe = self.eval_score(corr)
@@ -219,11 +220,5 @@ if __name__ == '__main__':
 						default = _fname_settings)
 	args = parser.parse_args()
 
-	# Log computational time
-	#datetime_now = datetime.datetime.now()
-
 	# Run main function
 	main(args.settings)
-
-	# print out compute time of main function in seconds
-	#print('Total computational time: {:.2f} seconds'.format((datetime.datetime.now() - datetime_now).total_seconds()))

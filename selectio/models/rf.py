@@ -71,8 +71,11 @@ def factor_importance(X_train, y_train, norm = True, max_samples = 2000):
 	imp_std_corr = result.importances_std
 
 	# Set non significant features to zero:
-	imp_mean_corr[imp_mean_corr / imp_std_corr < 3] = 0
+	imp_mean_corr[(imp_mean_corr / imp_std_corr) < 3] = 0
 	imp_mean_corr[imp_mean_corr < 0.01] = 0
 	if norm:
-		imp_mean_corr /= np.sum(imp_mean_corr)
+		if np.sum(imp_mean_corr) > 0:
+			imp_mean_corr /= np.sum(imp_mean_corr)
+		else:
+			imp_mean_corr = np.zeros(len(imp_mean_corr))	
 	return imp_mean_corr

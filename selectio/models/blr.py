@@ -53,12 +53,15 @@ def factor_importance(X, y, logspace = True, signif_threshold = 2, norm = True):
 	# reg.sigma_ is the estimated variance-covariance matrix of the weights,
 	# to calculate standard deviation of coeffcients:
 	coef_std = np.sqrt(np.diag(reg.sigma_)).copy()
-	coef_signif = coef / coef_std
+	coef_signif = abs(coef) / coef_std
 	#for i in range(len(coef)):
 	#	print('X' + str(i), ' wcorr=' + str(np.round(coef[i], 3)) + ' +/- ' + str(np.round(coef_sigma[i], 3)))
 	# Set not significant coefficients to zero:
 	coef_signif[coef_signif < signif_threshold] = 0
 	# Normalize:
 	if norm:
-		coef_signif /= np.sum(coef_signif)
+		if np.sum(coef_signif) > 0:
+			coef_signif /= np.sum(coef_signif)
+		else:
+			coef_signif = np.zeros(len(coef_signif))
 	return coef_signif

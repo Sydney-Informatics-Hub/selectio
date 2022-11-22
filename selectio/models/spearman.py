@@ -29,5 +29,8 @@ def factor_importance(X_train, y_train, norm = True):
 		if sr.pvalue < 0.01:
 			corr[i] = abs(sr.correlation)
 	if norm:
-		corr /= np.sum(corr)
+		if np.sum(corr) > 0:
+			corr /= np.sum(corr)
+		else:
+			corr = np.zeros(len(corr))	
 	return corr

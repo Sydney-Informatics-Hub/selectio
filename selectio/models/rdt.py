@@ -28,5 +28,8 @@ def factor_importance(X_train, y_train, norm = True):
     result = model.feature_importances_
     result[result < 0.001] = 0
     if norm:
-        result /= np.sum(result)
+        if np.sum(result) > 0:
+            result /= np.sum(result)
+        else:
+            result = np.zeros(len(result))	
     return result
