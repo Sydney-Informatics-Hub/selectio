@@ -41,8 +41,8 @@ def factor_importance(X, y, norm = True):
         xi_obj = Xicor(X[:,i], y)
         corr[i] = xi_obj.correlation
         pvals[i] = xi_obj.pval_asymptotic(ties=False, nperm=1000)
-    # set correlation coefficient to zero for non-significant p_values (P > 0.01)
-    corr[pvals>0.01] = 0
+    # set correlation coefficient to zero for non-significant p_values (P > 0.02)
+    corr[pvals>0.02] = 0
     if norm:
         if np.sum(corr) > 0:
             corr /= np.sum(corr)
