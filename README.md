@@ -140,6 +140,6 @@ of techniques for feature selection and to apply model cross-validations.
 
 ## License
 
-LGPL License
+LGPL-3.0 License
 
 Copyright (c) 2022 Sebastian Haan
