@@ -25,15 +25,16 @@ Feature-to-feature correlations are automatically clustered using hierarchical c
 
 ## Installation
 
+To install this package run one of the following:
+
 ```bash
-pip install selectio
+conda install -c conda-forge selectio
 ```
 
-or for development in a conda environment:
+or via pip:
 
 ```bash
-conda env update --file environment.yaml
-conda activate selectio
+pip install selectio
 ```
 
 ## Requirements
