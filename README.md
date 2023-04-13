@@ -2,6 +2,11 @@
 
 This Python package provides multiple feature importance scores and automatically suggests a feature selection based on the majority vote of all models.
 
+<figure>
+    <img src="figures/feature_importance.png" alt="Feature Importance">
+    <figcaption>Example feature importance scores for multiple models.<figcaption>
+</figure> 
+
 ## Models
 
 Currently the following models for feature importance scoring are included:
@@ -119,7 +124,7 @@ from selectio import tests
 tests.test_select()
 ```
 
-For more examples and how to create simulated  via `simdata.py`, see the provided Jupyter notebooks `feature_selection.ipynb`.
+For more examples and how to create simulated via `simdata.py`, see the provided Jupyter notebooks `feature_selection.ipynb`.
 
 
 ## Adding Custom Model Extensions
@@ -143,4 +148,4 @@ of techniques for feature selection and to apply model cross-validations.
 
 LGPL-3.0 License
 
-Copyright (c) 2022 Sebastian Haan
+Copyright (c) 2023 Sebastian Haan
