@@ -2,6 +2,11 @@
 
 This Python package provides multiple feature importance scores and automatically suggests a feature selection based on the majority vote of all models.
 
+<!-- Badges  start -->
+[![DOI](https://zenodo.org/badge/541830657.svg)](https://zenodo.org/badge/latestdoi/541830657)
+[![License](https://img.shields.io/badge/License-LGPL3-blue)](#license)
+<!-- Badges end -->
+
 <figure>
     <img src="figures/feature_importance.png" alt="Feature Importance">
     <figcaption>Example feature importance scores for multiple models.<figcaption>
