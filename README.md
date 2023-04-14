@@ -10,22 +10,22 @@ Version](https://img.shields.io/conda/vn/conda-forge/selectio.svg)](https://anac
 
 <!-- Badges end -->
 
-This Python package provides multiple feature importance scores and automatically suggests a feature selection based on the majority vote of all models.
+This Python package computes multiple feature importance scores for  tabulated data and automatically suggests a feature selection based on the majority vote of all models.
 
 <figure>
     <img src="figures/feature_importance.png" alt="Feature Importance">
-    <figcaption>Example feature importance scores for multiple models.<figcaption>
+    <figcaption>Example for multi-model feature importance scores.<figcaption>
 </figure> 
 
 ## Models
 
 Currently the following models for feature importance scoring are included:
-- Spearman rank analysis (see 'selectio.models.spearman')
-- Correlation coefficient significance of linear/log-scaled Bayesian Linear Regression (see 'selectio.models.blr')
-- Random Forest Permutation test (see 'selectio.models.rf')
-- Random Decision Trees on various subsamples of data (see 'selectio.models.rdt')
-- Mutual Information Regression (see 'selectio.models.mi')
-- General correlation coefficients (see 'selectio.models.xicor')
+- Spearman rank analysis (see [selectio.models.spearman](selectio/models/spearman.py))
+- Correlation coefficient significance of linear/log-scaled Bayesian Linear Regression (see [selectio.models.blr](selectio/models/blr.py))
+- Random Forest Permutation test (see [selectio.models.rf](selectio/models/rf.py))
+- Random Decision Trees on various subsamples of data (see [selectio.models.rdt](selectio/models/rdt.py))
+- Mutual Information Regression (see [selectio.models.mi](selectio/models/mi.py))
+- General correlation coefficients (see [selectio.models.xicor](selectio/models/xicor.py))
 
 ## Feature Importance Scores and Cross-Correlations
 
@@ -52,23 +52,33 @@ or via pip:
 pip install selectio
 ```
 
-## Requirements
+For development, fork the repository and install dependencies as given in the `environment.yaml` file:
+    ```bash
+    conda env create -f environment.yaml
+    ```
 
-- numpy
-- pandas
-- scikit-learn
-- scipy
-- matplotlib
-- pyyaml
-
-See file environment.yaml for more details.
 
 ## Usage
 
-There are multiple options to compute feature selection scores 
+There are multiple options to compute feature selection scores: 
 
-### Option 1) 
-with a settings yaml file (template provided) that includes all processing and plotting functionality, e.g:
+### **Option A)** 
+
+as standalone script with a settings file:
+```bash
+cd selectio
+python selectio.py -s <FILENAME>.yaml
+```
+
+This will automatically save all scores and selections in csv file and create multiple score plots.
+
+User settings such as input filename and all other options are set in the settings file, which is given in the command line argument with: 
+'-s', or '--settings' followed by PATH-TO-FILE/FILENAME.yaml 
+(e.g. python selectio.py -s settings/settings_featureimportance.yaml)
+If settings-file name is not given, the default settings filename  `settings_featureimportance.yaml` is used. See for settings file template [settings_featureimportance.yaml](selectio/settings/settings_featureimportance.yaml). See for more details [Settings YAML file](#settings-yaml-file).
+
+### **Option B)** 
+as function call in python script:
 ```python
 from selectio import selectio
 # Read in data from file, generate feature importance plots and save results as csv:
@@ -76,7 +86,7 @@ selectio.main('settings_featureimportance.yaml')
 ```
 This will automatically save all scores and selections in csv file and create multiple score plots.
 
-### Option 2) 
+### **Option C)** 
 computed directly using the class selectio.Fsel, e.g.
 
 ```python
@@ -89,19 +99,6 @@ dfres = fsel.score_models()
 This returns a table with all scores and feature selections. See for more details and visualisation of scores "Option 2)" in the example notebook `feature_selection.ipynb`.
 
 
-### Option 3) 
-as standalone script with a settings file:
-```bash
-cd selectio
-python selectio.py -s <FILENAME>.yaml
-```
-
-User settings such as input/output paths and all other options are set in the settings file 
-(Default filename: settings_featureimportance.yaml) 
-Alternatively, the settings file can be specified as a command line argument with: 
-'-s', or '--settings' followed by PATH-TO-FILE/FILENAME.yaml 
-(e.g. python selectio.py -s settings/settings_featureimportance.yaml).
-
 ## Settings YAML file
 
 For settings file template, see [here](https://github.com/sebhaan/selectio/blob/main/selectio/settings/settings_featureimportance.yaml)
@@ -110,7 +107,7 @@ The main settings are:
 ```yaml
 # Input data path:
 inpath: ...
-# File name with soil data and corresponding covariates:
+# File name with numerical data and corresponding covariates:
 infname: ...
 # Output results path:
 outpath: ...
@@ -145,17 +142,20 @@ which includes at least:
 - a `__name__` and `__fullname__` attribute
 - adding the new module name to the `__init_file__.py` file in the folder models
 
-Other models for feature selections have been considered, such as PCA or SVD-based methods or
-univariate screening methods (t-test, correlation, etc.). However, some of these models consider either 
-only linear relationships, or do not take into account the potential multivariate nature of the data structure 
-(e.g., higher order interaction between variables). Note that not all included models are completely generalizable, 
-such as Bayesian regression and Spearman ranking given their dependence on monotonic functional behavior.
+Other models for feature selections have been considered, such as PCA or SVD-based methods or univariate screening methods (t-test, correlation, etc.). However, some of these models consider either 
+only linear relationships, or do not take into account the potential multivariate nature of the data structure  (e.g., higher order interaction between variables). Note that not all included models are completely generalizable, such as Bayesian regression and Spearman ranking given their dependence on monotonic functional behavior.
 
-Since most models have some limitations or rely on certain data assumptions, it is important to consider a variety 
-of techniques for feature selection and to apply model cross-validations.
+Since most models have some limitations or rely on certain data assumptions, it is important to consider a variety of techniques for feature selection and to apply model cross-validations.
+
+## Contributions
+
+Contributions are welcome to improve and enhance the Selectio open-source package. To contribute, please start by familiarizing yourself with the project and code structure. For bug reports and feature requests, create a new issue on our GitHub repository. If you're interested in contributing code, documentation, or tests, please fork the repository, create a new branch, and submit a pull request. Be sure to follow the established coding style and guidelines, provide clear and concise commit messages, and thoroughly test your changes. Together, we can make Selectio an even more helpful and reliable tool for everyone.
 
 ## License
 
-LGPL-3.0 License
-
 Copyright (c) 2023 Sebastian Haan
+
+This is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License (LGPL version 3) as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the [GNU Lesser General Public License](LICENSE) for more details.
+
